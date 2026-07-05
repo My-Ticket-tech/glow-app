@@ -1,0 +1,38 @@
+{
+  "_como_usar": "Edite este arquivo para trocar os anúncios do app — sem mexer no código. Cada anúncio: id (único), active (true/false), placements (onde aparece: hoje, shop, dicas), brand (nome da marca), title, text, cta (texto do botão), url (link da marca ou afiliado), weight (peso na rotação: 2 aparece 2x mais que 1). Depois de editar, faça commit no GitHub que o app atualiza sozinho.",
+  "ads": [
+    {
+      "id": "afiliado-protetor",
+      "active": true,
+      "placements": ["hoje"],
+      "brand": "Escolha Glow",
+      "title": "O protetor solar que a sua rotina pede ☀️",
+      "text": "FPS 50, toque seco e aprovado pelas dermatologistas. Veja as ofertas de hoje.",
+      "cta": "Ver ofertas",
+      "url": "https://www.amazon.com.br/s?k=protetor+solar+facial+fps+50&tag=glowapp-20",
+      "weight": 1
+    },
+    {
+      "id": "afiliado-vitamina-c",
+      "active": true,
+      "placements": ["shop", "dicas"],
+      "brand": "Escolha Glow",
+      "title": "Sérum de Vitamina C em promoção ✨",
+      "text": "O ativo queridinho para dar viço e uniformizar o tom da pele.",
+      "cta": "Aproveitar",
+      "url": "https://www.amazon.com.br/s?k=serum+vitamina+c+facial&tag=glowapp-20",
+      "weight": 1
+    },
+    {
+      "id": "exemplo-marca-parceira",
+      "active": false,
+      "placements": ["hoje", "shop"],
+      "brand": "Marca Parceira",
+      "title": "Espaço reservado para sua marca 💗",
+      "text": "Quando fechar com uma marca de skincare, ative este anúncio (active: true) e troque textos e link.",
+      "cta": "Conhecer",
+      "url": "https://exemplo.com.br",
+      "weight": 2
+    }
+  ]
+}
