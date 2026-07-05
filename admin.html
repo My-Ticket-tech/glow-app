@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Glow · Painel da Fundadora</title>
+<style>
+  :root{
+    --bg:#f6f3ed; --card:#fffefb; --ink:#2b2723; --muted:#8f867a; --line:#eae4d8;
+    --pri:#b45f43; --pri-dark:#96482f; --pri-soft:#f4e7df; --sage:#5f6f5b; --sage-soft:#eef0ea;
+    --gold-soft:#f5eeda; --ok:#5f8f6d;
+    --grad:linear-gradient(135deg,#c97a55,#b45f43);
+    --shadow:0 2px 4px rgba(60,45,30,.05), 0 12px 32px rgba(60,45,30,.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 60px}
+  h1{font-family:Georgia,serif;font-size:1.6rem}
+  h2{font-size:1.05rem;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:.88rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border:none;border-radius:12px;background:var(--grad);color:#fff;font-size:.92rem;font-weight:650;cursor:pointer;font-family:inherit}
+  .btn.sec{background:var(--sage-soft);color:var(--sage)}
+  .btn.ghost{background:transparent;color:var(--muted);font-weight:500}
+  .btn:disabled{opacity:.5;cursor:default}
+  input[type=text],input[type=password],input[type=number],input[type=url],textarea{width:100%;padding:11px 13px;font-size:.9rem;font-family:inherit;border:1.5px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);outline:none;margin:4px 0 10px}
+  input:focus,textarea:focus{border-color:var(--pri)}
+  label{font-size:.78rem;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .pill{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:99px;background:var(--pri-soft);color:var(--pri-dark)}
+  .pill.ok{background:#e7f0e9;color:var(--ok)}
+  .pill.off{background:var(--line);color:var(--muted)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .grow{flex:1}
+  .adcard{border:1.5px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;background:#fff}
+  .adcard.inactive{opacity:.6}
+  .chk{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;margin-right:14px;cursor:pointer}
+  .msg{padding:12px 16px;border-radius:12px;font-size:.88rem;margin-bottom:14px;display:none}
+  .msg.ok{display:block;background:#e7f0e9;color:#2e5c3e}
+  .msg.err{display:block;background:#fbeae6;color:#8c3a28}
+  .commit{padding:10px 0;border-bottom:1px solid var(--line);font-size:.85rem}
+  .commit:last-child{border:none}
+  .commit .d{color:var(--muted);font-size:.76rem}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+  .stat .n{font-size:1.5rem;font-weight:750;color:var(--pri-dark)}
+  .stat .l{font-size:.75rem;color:var(--muted)}
+  .hidden{display:none!important}
+  a{color:var(--pri-dark)}
+  code{background:var(--gold-soft);padding:2px 6px;border-radius:6px;font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="row" style="margin-bottom:20px">
+    <div class="grow">
+      <h1>glow<span style="color:var(--pri)">.</span> Painel da Fundadora</h1>
+      <p class="sub">Acompanhe o app e publique mudanças sem tocar em código.</p>
+    </div>
+    <button class="btn ghost hidden" id="logout">Sair</button>
+  </div>
+
+  <div class="msg" id="msg"></div>
+
+  <!-- ============ LOGIN ============ -->
+  <div class="card" id="gate">
+    <h2>🔐 Acesso restrito</h2>
+    <p class="sub" style="margin-bottom:14px">Este painel funciona com o seu token pessoal do GitHub — só quem tem o token consegue publicar mudanças no app.</p>
+    <p class="sub" style="margin-bottom:14px"><b>Como criar o token (uma vez só):</b><br>
+      1. Entre em <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a><br>
+      2. Nome: <code>painel-glow</code> · Expiração: 1 ano<br>
+      3. Em <i>Repository access</i>, escolha <b>Only select repositories</b> → <code>glow-app</code><br>
+      4. Em <i>Permissions → Contents</i>, escolha <b>Read and write</b><br>
+      5. Gere, copie o token (começa com <code>github_pat_</code>) e cole abaixo.</p>
+    <label>Seu token do GitHub</label>
+    <input type="password" id="tokenInput" placeholder="github_pat_...">
+    <button class="btn" id="loginBtn">Entrar no painel</button>
+    <p class="sub" style="margin-top:10px;font-size:.76rem">O token fica salvo apenas neste navegador, no seu aparelho.</p>
+  </div>
+
+  <!-- ============ PAINEL ============ -->
+  <div id="panel" class="hidden">
+
+    <div class="card">
+      <h2>📈 Status do app</h2>
+      <div class="stat-grid" style="margin:12px 0">
+        <div class="stat"><div class="n" id="stCommits">—</div><div class="l">atualizações publicadas</div></div>
+        <div class="stat"><div class="n" id="stAds">—</div><div class="l">anúncios ativos</div></div>
+        <div class="stat"><div class="n" id="stUpdated">—</div><div class="l">última atualização</div></div>
+      </div>
+      <p class="sub">Últimas mudanças publicadas:</p>
+      <div id="commitList"></div>
+      <p class="sub" style="margin-top:10px">🔗 <a href="https://my-ticket-tech.github.io/glow-app/" target="_blank" rel="noopener">Abrir o app</a> · <a href="https://github.com/My-Ticket-tech/glow-app" target="_blank" rel="noopener">Repositório</a></p>
+    </div>
+
+    <div class="card">
+      <h2>📣 Anúncios e patrocinadores</h2>
+      <p class="sub" style="margin-bottom:14px">Edite, ative ou crie anúncios. Ao salvar, o app de <b>todas as usuárias</b> atualiza em ~1 minuto. Peso 2 aparece 2× mais que peso 1.</p>
+      <div id="adsEditor"><p class="sub">Carregando anúncios…</p></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn sec" id="addAd">+ Novo anúncio</button>
+        <button class="btn grow" id="saveAds">💾 Salvar e publicar para todas</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📊 Estatísticas</h2>
+      <p class="sub" style="margin-bottom:10px">Impressões e cliques de anúncios <b>registrados neste aparelho</b> (cada aparelho guarda os próprios números — para métricas globais de todas as usuárias, o próximo passo é ativar o Cloudflare Web Analytics, grátis, quando criarmos sua conta Cloudflare).</p>
+      <div id="statsBox" class="sub">—</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const OWNER = 'My-Ticket-tech', REPO = 'glow-app';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+let TOKEN = localStorage.getItem('glow_admin_token') || '';
+let adsData = null, adsSha = null;
+
+const $ = id => document.getElementById(id);
+const gh = (path, opts={}) => fetch(API + path, {
+  ...opts,
+  headers: {
+    'Authorization': 'Bearer ' + TOKEN,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    ...(opts.headers || {})
+  }
+});
+function say(text, kind){
+  const m = $('msg');
+  m.textContent = text;
+  m.className = 'msg ' + kind;
+  if(kind === 'ok') setTimeout(()=>{ m.className = 'msg'; }, 5000);
+}
+const b64decode = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g,'')), c=>c.charCodeAt(0)));
+function b64encode(s){
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for(let i=0; i<bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+/* ---------- login ---------- */
+async function tryLogin(){
+  const r = await gh('');
+  if(!r.ok){
+    TOKEN = '';
+    localStorage.removeItem('glow_admin_token');
+    return false;
+  }
+  localStorage.setItem('glow_admin_token', TOKEN);
+  $('gate').classList.add('hidden');
+  $('panel').classList.remove('hidden');
+  $('logout').classList.remove('hidden');
+  loadStatus(); loadAds(); loadStats();
+  return true;
+}
+$('loginBtn').onclick = async ()=>{
+  TOKEN = $('tokenInput').value.trim();
+  if(!TOKEN){ say('Cole o token primeiro.', 'err'); return; }
+  say('Verificando…', 'ok');
+  if(await tryLogin()) say('Bem-vindo ao painel! ✦', 'ok');
+  else say('Token inválido ou sem acesso ao repositório glow-app. Confira as permissões (Contents: Read and write).', 'err');
+};
+$('logout').onclick = ()=>{
+  TOKEN = '';
+  localStorage.removeItem('glow_admin_token');
+  location.reload();
+};
+
+/* ---------- status ---------- */
+async function loadStatus(){
+  try{
+    const commits = await (await gh('/commits?per_page=30')).json();
+    $('stCommits').textContent = commits.length >= 30 ? '30+' : commits.length;
+    const last = commits[0];
+    $('stUpdated').textContent = new Date(last.commit.author.date).toLocaleDateString('pt-BR');
+    $('commitList').innerHTML = commits.slice(0,5).map(c=>
+      `<div class="commit">${c.commit.message.split('\n')[0]}
+       <div class="d">${new Date(c.commit.author.date).toLocaleString('pt-BR')}</div></div>`).join('');
+  }catch(e){ $('commitList').innerHTML = '<p class="sub">Não foi possível carregar.</p>'; }
+}
+
+/* ---------- anúncios ---------- */
+async function loadAds(){
+  try{
+    const r = await gh('/contents/ads.json');
+    const data = await r.json();
+    adsSha = data.sha;
+    adsData = JSON.parse(b64decode(data.content));
+    renderAdsEditor();
+  }catch(e){
+    $('adsEditor').innerHTML = '<p class="sub">Erro ao carregar os anúncios.</p>';
+  }
+}
+function renderAdsEditor(){
+  const el = $('adsEditor');
+  el.innerHTML = '';
+  $('stAds').textContent = adsData.ads.filter(a=>a.active).length;
+  adsData.ads.forEach((ad, i)=>{
+    const div = document.createElement('div');
+    div.className = 'adcard' + (ad.active ? '' : ' inactive');
+    div.innerHTML = `
+      <div class="row" style="margin-bottom:8px">
+        <span class="pill ${ad.active?'ok':'off'}">${ad.active?'no ar':'desativado'}</span>
+        <span class="grow"></span>
+        <button class="btn ghost" data-del="${i}" style="padding:4px 10px">🗑️</button>
+      </div>
+      <label>Marca / patrocinador</label><input type="text" data-f="brand" data-i="${i}" value="${(ad.brand||'').replace(/"/g,'&quot;')}">
+      <label>Título</label><input type="text" data-f="title" data-i="${i}" value="${(ad.title||'').replace(/"/g,'&quot;')}">
+      <label>Texto</label><textarea data-f="text" data-i="${i}" rows="2">${ad.text||''}</textarea>
+      <div class="row">
+        <div class="grow"><label>Botão</label><input type="text" data-f="cta" data-i="${i}" value="${(ad.cta||'').replace(/"/g,'&quot;')}"></div>
+        <div style="width:90px"><label>Peso</label><input type="number" min="1" max="9" data-f="weight" data-i="${i}" value="${ad.weight||1}"></div>
+      </div>
+      <label>Link (site do patrocinador ou link de afiliado)</label><input type="url" data-f="url" data-i="${i}" value="${(ad.url||'').replace(/"/g,'&quot;')}">
+      <div style="margin-top:6px">
+        <label class="chk"><input type="checkbox" data-active="${i}" ${ad.active?'checked':''}> Ativo</label>
+        ${['hoje','shop','dicas'].map(p=>`<label class="chk"><input type="checkbox" data-place="${p}" data-i="${i}" ${(ad.placements||[]).includes(p)?'checked':''}> ${p==='hoje'?'Aba Hoje':p==='shop'?'Loja':'Minha Pele'}</label>`).join('')}
+      </div>`;
+    el.appendChild(div);
+  });
+  el.querySelectorAll('[data-f]').forEach(inp=>{
+    inp.onchange = ()=>{
+      const ad = adsData.ads[+inp.dataset.i];
+      ad[inp.dataset.f] = inp.dataset.f === 'weight' ? Math.max(1, +inp.value||1) : inp.value;
+    };
+  });
+  el.querySelectorAll('[data-active]').forEach(inp=>{
+    inp.onchange = ()=>{ adsData.ads[+inp.dataset.active].active = inp.checked; renderAdsEditor(); };
+  });
+  el.querySelectorAll('[data-place]').forEach(inp=>{
+    inp.onchange = ()=>{
+      const ad = adsData.ads[+inp.dataset.i];
+      ad.placements = ad.placements || [];
+      if(inp.checked){ if(!ad.placements.includes(inp.dataset.place)) ad.placements.push(inp.dataset.place); }
+      else ad.placements = ad.placements.filter(p=>p!==inp.dataset.place);
+    };
+  });
+  el.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.onclick = ()=>{
+      if(confirm('Excluir este anúncio?')){
+        adsData.ads.splice(+btn.dataset.del, 1);
+        renderAdsEditor();
+      }
+    };
+  });
+}
+$('addAd').onclick = ()=>{
+  adsData.ads.push({
+    id: 'anuncio-' + Date.now(), active: false, placements: ['shop'],
+    brand: 'Nova marca', title: 'Título do anúncio', text: 'Texto do anúncio.',
+    cta: 'Conhecer', url: 'https://', weight: 1
+  });
+  renderAdsEditor();
+};
+$('saveAds').onclick = async ()=>{
+  $('saveAds').disabled = true;
+  say('Publicando…', 'ok');
+  try{
+    const r = await gh('/contents/ads.json', {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: 'Atualiza anuncios pelo Painel da Fundadora',
+        content: b64encode(JSON.stringify(adsData, null, 2)),
+        sha: adsSha
+      })
+    });
+    if(!r.ok) throw new Error(await r.text());
+    const out = await r.json();
+    adsSha = out.content.sha;
+    say('✓ Publicado! As usuárias recebem os anúncios novos em ~1 minuto.', 'ok');
+    loadStatus();
+  }catch(e){
+    say('Erro ao publicar. Tente recarregar a página e salvar de novo.', 'err');
+  }
+  $('saveAds').disabled = false;
+};
+
+/* ---------- estatísticas locais ---------- */
+function loadStats(){
+  try{
+    const s = JSON.parse(localStorage.getItem('glow_ad_stats') || '{}');
+    const keys = Object.keys(s);
+    $('statsBox').innerHTML = keys.length
+      ? '<div class="stat-grid">' + keys.map(k=>
+          `<div class="stat"><div class="n">${s[k].click}</div><div class="l">cliques · ${k}<br>(${s[k].imp} exibições)</div></div>`).join('') + '</div>'
+      : 'Nenhum dado neste aparelho ainda — use o app por aqui para registrar.';
+  }catch(e){ $('statsBox').textContent = '—'; }
+}
+
+/* ---------- boot ---------- */
+if(TOKEN) tryLogin();
+</script>
+</body>
+</html>
