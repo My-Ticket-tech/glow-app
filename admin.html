@@ -67,11 +67,14 @@
     <h2>🔐 Acesso restrito</h2>
     <p class="sub" style="margin-bottom:14px">Este painel funciona com o seu token pessoal do GitHub — só quem tem o token consegue publicar mudanças no app.</p>
     <p class="sub" style="margin-bottom:14px"><b>Como criar o token (uma vez só):</b><br>
-      1. Entre em <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a><br>
-      2. Nome: <code>painel-glow</code> · Expiração: 1 ano<br>
-      3. Em <i>Repository access</i>, escolha <b>Only select repositories</b> → <code>glow-app</code><br>
-      4. Em <i>Permissions → Contents</i>, escolha <b>Read and write</b><br>
-      5. Gere, copie o token (começa com <code>github_pat_</code>) e cole abaixo.</p>
+      1. No GitHub (logado como My-Ticket-tech), clique na sua <b>foto no canto superior direito → Settings</b><br>
+      2. Desça o menu da esquerda até o fim: <b>&lt;/&gt; Developer settings</b><br>
+      3. <b>Personal access tokens → Fine-grained tokens → Generate new token</b><br>
+      4. Preencha: <i>Token name</i>: <code>painel-glow</code> · <i>Expiration</i>: <b>Custom</b> → 1 ano<br>
+      5. Em <i>Repository access</i>, marque <b>Only select repositories</b> e escolha <code>glow-app</code><br>
+      6. Clique em <b>Repository permissions</b> (lista azul) e procure a linha <b>Contents</b> → mude de "No access" para <b>Read and write</b> (as outras linhas ficam como estão)<br>
+      7. Botão verde <b>Generate token</b> no final → copie o código que aparece (começa com <code>github_pat_</code>) e cole aqui embaixo.<br>
+      <span style="color:var(--pri-dark)">Atalho direto: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></span></p>
     <label>Seu token do GitHub</label>
     <input type="password" id="tokenInput" placeholder="github_pat_...">
     <button class="btn" id="loginBtn">Entrar no painel</button>
