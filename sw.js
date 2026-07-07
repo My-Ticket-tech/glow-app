@@ -1,1 +1,52 @@
-const CACHE="glow-v5",ASSETS=["./","./index.html","./manifest.json","./ads.json","./apple-touch-icon.png","./icon-192.png","./icon-512.png"];self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(e=>e.addAll(ASSETS)).then(()=>self.skipWaiting()))}),self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(e=>Promise.all(e.filter(e=>e!==CACHE).map(e=>caches.delete(e)))).then(()=>self.clients.claim()))}),self.addEventListener("fetch",e=>{const t=e.request;t.url.includes("ads.json")?e.respondWith(fetch(t).then(e=>{const n=e.clone();return caches.open(CACHE).then(e=>e.put(t,n)),e}).catch(()=>caches.match(t,{ignoreSearch:!0}))):"navigate"!==t.mode&&"document"!==t.destination?e.respondWith(caches.match(t,{ignoreSearch:!0}).then(e=>e||fetch(t).then(e=>{const n=e.clone();return caches.open(CACHE).then(e=>e.put(t,n)),e}))):e.respondWith(fetch(t).then(e=>{const t=e.clone();return caches.open(CACHE).then(e=>e.put("./index.html",t)),e}).catch(()=>caches.match("./index.html")))});
+/* Service worker do Glow — funciona offline e sempre entrega a versão mais nova */
+const CACHE = 'glow-v5';
+const ASSETS = ['./', './index.html', './manifest.json', './ads.json', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];
+
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  // ads.json: rede primeiro, para as propagandas atualizarem na hora
+  if (req.url.includes('ads.json')) {
+    e.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy));
+        return res;
+      }).catch(() => caches.match(req, { ignoreSearch: true }))
+    );
+    return;
+  }
+  // páginas HTML: rede primeiro (pega atualizações), cache se estiver offline
+  if (req.mode === 'navigate' || req.destination === 'document') {
+    e.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put('./index.html', copy));
+        return res;
+      }).catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+  // demais arquivos (ícones, fontes): cache primeiro, rede como complemento
+  e.respondWith(
+    caches.match(req, { ignoreSearch: true }).then(hit =>
+      hit ||
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy));
+        return res;
+      })
+    )
+  );
+});

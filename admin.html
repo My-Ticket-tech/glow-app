@@ -107,6 +107,13 @@
     </div>
 
     <div class="card">
+      <h2>💌 E-mails da newsletter</h2>
+      <p class="sub" style="margin-bottom:10px">Inscritas pelo card "Dicas de skincare" do app. Exporte para o Beehiiv, Mailchimp ou similar.</p>
+      <div id="subsBox" class="sub">Carregando…</div>
+      <button class="btn sec" id="copySubs" style="margin-top:12px">📋 Copiar todos os e-mails</button>
+    </div>
+
+    <div class="card">
       <h2>📊 Estatísticas</h2>
       <p class="sub" style="margin-bottom:10px">Impressões e cliques de anúncios <b>registrados neste aparelho</b> (cada aparelho guarda os próprios números — para métricas globais de todas as usuárias, o próximo passo é ativar o Cloudflare Web Analytics, grátis, quando criarmos sua conta Cloudflare).</p>
       <div id="statsBox" class="sub">—</div>
@@ -117,6 +124,7 @@
 <script>
 const OWNER = 'My-Ticket-tech', REPO = 'glow-app';
 const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+const WORKER = 'https://glow-identify.glowapp.workers.dev';
 let TOKEN = localStorage.getItem('glow_admin_token') || '';
 let adsData = null, adsSha = null;
 
@@ -156,9 +164,29 @@ async function tryLogin(){
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
   $('logout').classList.remove('hidden');
-  loadStatus(); loadAds(); loadStats();
+  loadStatus(); loadAds(); loadStats(); loadSubs();
   return true;
 }
+
+/* ---------- newsletter ---------- */
+let subsList = [];
+async function loadSubs(){
+  try{
+    const r = await fetch(WORKER + '/subscribers', { headers: { 'X-Admin-Token': TOKEN } });
+    if(!r.ok) throw 0;
+    const d = await r.json();
+    subsList = d.emails || [];
+    $('subsBox').innerHTML = subsList.length
+      ? `<b>${d.total} inscrita(s)</b><div style="max-height:220px;overflow:auto;margin-top:8px">` +
+        subsList.map(s=>`<div class="commit">${s.email}<div class="d">${s.date ? new Date(s.date).toLocaleString('pt-BR') : ''}</div></div>`).join('') + '</div>'
+      : 'Nenhuma inscrita ainda — o card de e-mail aparece na aba Hoje do app.';
+  }catch(e){ $('subsBox').textContent = 'Não foi possível carregar a lista.'; }
+}
+$('copySubs').onclick = async ()=>{
+  if(!subsList.length){ say('Nenhum e-mail para copiar ainda.', 'err'); return; }
+  await navigator.clipboard.writeText(subsList.map(s=>s.email).join('\n'));
+  say(`✓ ${subsList.length} e-mail(s) copiados para a área de transferência.`, 'ok');
+};
 $('loginBtn').onclick = async ()=>{
   TOKEN = $('tokenInput').value.trim();
   if(!TOKEN){ say('Cole o token primeiro.', 'err'); return; }
