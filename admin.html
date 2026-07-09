@@ -248,7 +248,7 @@ function renderAdsEditor(){
       <label>Link (site do patrocinador ou link de afiliado)</label><input type="url" data-f="url" data-i="${i}" value="${(ad.url||'').replace(/"/g,'&quot;')}">
       <div style="margin-top:6px">
         <label class="chk"><input type="checkbox" data-active="${i}" ${ad.active?'checked':''}> Ativo</label>
-        ${['hoje','shop','dicas'].map(p=>`<label class="chk"><input type="checkbox" data-place="${p}" data-i="${i}" ${(ad.placements||[]).includes(p)?'checked':''}> ${p==='hoje'?'Aba Hoje':p==='shop'?'Loja':'Minha Pele'}</label>`).join('')}
+        ${['shop'].map(p=>`<label class="chk"><input type="checkbox" data-place="${p}" data-i="${i}" ${(ad.placements||[]).includes(p)?'checked':''}> Exibir na Loja</label>`).join('')}
       </div>`;
     el.appendChild(div);
   });

@@ -4,7 +4,7 @@
     {
       "id": "afiliado-protetor",
       "active": true,
-      "placements": ["hoje"],
+      "placements": ["shop"],
       "brand": "Escolha Glow",
       "title": "O protetor solar que a sua rotina pede ☀️",
       "text": "FPS 50, toque seco e aprovado pelas dermatologistas. Veja as ofertas de hoje.",
@@ -15,7 +15,7 @@
     {
       "id": "afiliado-vitamina-c",
       "active": true,
-      "placements": ["shop", "dicas"],
+      "placements": ["shop"],
       "brand": "Escolha Glow",
       "title": "Sérum de Vitamina C em promoção ✨",
       "text": "O ativo queridinho para dar viço e uniformizar o tom da pele.",
@@ -26,7 +26,7 @@
     {
       "id": "exemplo-marca-parceira",
       "active": false,
-      "placements": ["hoje", "shop"],
+      "placements": ["shop"],
       "brand": "Marca Parceira",
       "title": "Espaço reservado para sua marca 💗",
       "text": "Quando fechar com uma marca de skincare, ative este anúncio (active: true) e troque textos e link.",
