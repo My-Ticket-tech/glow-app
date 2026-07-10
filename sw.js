@@ -1,5 +1,5 @@
 /* Service worker do Glow — funciona offline e sempre entrega a versão mais nova */
-const CACHE = 'glow-v5';
+const CACHE = 'glow-v6';
 const ASSETS = ['./', './index.html', './manifest.json', './ads.json', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -48,5 +48,27 @@ self.addEventListener('fetch', e => {
         return res;
       })
     )
+  );
+});
+
+/* ---------- push: notificações com o app fechado ---------- */
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (err) {}
+  e.waitUntil(self.registration.showNotification(d.title || 'Glow ✦', {
+    body: d.body || '',
+    icon: 'icon-192.png',
+    badge: 'icon-192.png',
+    data: { url: (d.url || './') },
+  }));
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      for (const c of list) { if ('focus' in c) return c.focus(); }
+      return clients.openWindow((e.notification.data && e.notification.data.url) || './');
+    })
   );
 });
