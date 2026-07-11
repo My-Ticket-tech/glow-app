@@ -1,0 +1,17 @@
+{
+  "_como_usar": "Produtos em alta na Loja do Glow. Edite este arquivo para atualizar a vitrine sem mexer no codigo (o agente semanal tambem pode atualizar). Campos: b=marca, n=nome, cat=limpeza|hidratante|tratamento|protecao, actives=chaves do ACTIVES_DB (retinol,vitc,bha,aha,niacinamida,azelaico,ha,cica,tranexamico,bakuchiol,cafeina,ceramidas), frag=tem fragrancia, q=busca de afiliado, tag=selo do card, img=foto (Amazon CDN).",
+  "products": [
+    {"b":"CeraVe","n":"Loção Hidratante Facial","cat":"hidratante","actives":["ceramidas","ha"],"frag":false,"q":"cerave locao hidratante facial","tag":"Queridinho","img":"https://m.media-amazon.com/images/I/61e7BF-RoIL._AC_UL320_.jpg"},
+    {"b":"La Roche-Posay","n":"Cicaplast Baume B5+","cat":"tratamento","actives":["cica"],"frag":false,"q":"cicaplast baume b5","tag":"Viral","img":"https://m.media-amazon.com/images/I/41LpbF-1WDL._AC_UL320_.jpg"},
+    {"b":"Beauty of Joseon","n":"Relief Sun FPS 50+","cat":"protecao","actives":[],"frag":false,"q":"beauty of joseon relief sun","tag":"K-beauty viral","img":"https://m.media-amazon.com/images/I/61T5INZBBOL._AC_UL320_.jpg"},
+    {"b":"Principia","n":"Sérum HA-1 Ácido Hialurônico","cat":"tratamento","actives":["ha"],"frag":false,"q":"principia acido hialuronico ha-1","tag":"Brasileira","img":"https://m.media-amazon.com/images/I/61VHMd5enVL._AC_UL320_.jpg"},
+    {"b":"La Roche-Posay","n":"Anthelios Airlicium FPS 70","cat":"protecao","actives":[],"frag":true,"q":"anthelios airlicium fps 70","tag":"Top em FPS","img":"https://m.media-amazon.com/images/I/419Atx-XGTL._AC_UL320_.jpg"},
+    {"b":"Cetaphil","n":"Gel de Limpeza Facial","cat":"limpeza","actives":[],"frag":false,"q":"cetaphil gel de limpeza facial","tag":"Clássico","img":"https://m.media-amazon.com/images/I/51nH5eAPoTL._AC_UL320_.jpg"},
+    {"b":"Creamy","n":"Ácido Azelaico 10%","cat":"tratamento","actives":["azelaico"],"frag":false,"q":"creamy acido azelaico","tag":"Derm favorito","img":"https://m.media-amazon.com/images/I/41u5hCkVweL._AC_UL320_.jpg"},
+    {"b":"Sallve","n":"Sérum Antioxidante Vit. C","cat":"tratamento","actives":["vitc"],"frag":false,"q":"sallve serum antioxidante","tag":"Brasileira","img":"https://m.media-amazon.com/images/I/41HU-RNXuuL._AC_UL320_.jpg"},
+    {"b":"Neutrogena","n":"Hydro Boost Water Gel","cat":"hidratante","actives":["ha"],"frag":true,"q":"neutrogena hydro boost water gel","tag":"Popular","img":"https://m.media-amazon.com/images/I/517yaXCD5oL._AC_UL320_.jpg"},
+    {"b":"NIVEA","n":"Luminous 630 Antimanchas","cat":"tratamento","actives":["niacinamida"],"frag":true,"q":"nivea luminous 630 antimanchas serum","tag":"Antimanchas","img":"https://m.media-amazon.com/images/I/71p4HyifokL._AC_UL320_.jpg"},
+    {"b":"Torriden","n":"DIVE-IN Sérum","cat":"tratamento","actives":["ha"],"frag":false,"q":"torriden dive in serum","tag":"K-beauty","img":"https://m.media-amazon.com/images/I/61CIxJ0VQ2L._AC_UL320_.jpg"},
+    {"b":"Bioré","n":"UV Aqua Rich FPS 50+","cat":"protecao","actives":["ha"],"frag":false,"q":"biore uv aqua rich protetor","tag":"Toque seco","img":"https://m.media-amazon.com/images/I/81Cy0s5fx-L._AC_UL320_.jpg"}
+  ]
+}
