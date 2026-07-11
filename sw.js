@@ -1,5 +1,5 @@
 /* Service worker do Glow — funciona offline e sempre entrega a versão mais nova */
-const CACHE = 'glow-v10';
+const CACHE = 'glow-v11';
 const ASSETS = ['./', './index.html', './manifest.json', './ads.json', './lumi.svg', './trending.json', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -16,8 +16,8 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const req = e.request;
-  // ads.json: rede primeiro, para as propagandas atualizarem na hora
-  if (req.url.includes('ads.json')) {
+  // ads.json e trending.json: rede primeiro, para publis e vitrine de virais atualizarem na hora
+  if (req.url.includes('ads.json') || req.url.includes('trending.json')) {
     e.respondWith(
       fetch(req).then(res => {
         const copy = res.clone();
