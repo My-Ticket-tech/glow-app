@@ -114,8 +114,30 @@
     </div>
 
     <div class="card">
-      <h2>📊 Estatísticas</h2>
-      <p class="sub" style="margin-bottom:10px">Impressões e cliques de anúncios <b>registrados neste aparelho</b> (cada aparelho guarda os próprios números — para métricas globais de todas as usuárias, o próximo passo é ativar o Cloudflare Web Analytics, grátis, quando criarmos sua conta Cloudflare).</p>
+      <h2>📊 Métricas do app (todas as usuárias)</h2>
+      <p class="sub" style="margin-bottom:12px">Números reais e globais dos últimos 30 dias — visitantes, uso e o que gera comissão.</p>
+      <div class="stat-grid" id="metricTotals" style="margin-bottom:14px"><p class="sub">Carregando…</p></div>
+      <div id="metricDaily" class="sub"></div>
+    </div>
+
+    <div class="card">
+      <h2>💎 Assinaturas · gerar códigos de ativação</h2>
+      <p class="sub" style="margin-bottom:12px">Gere códigos e entregue à compradora após o pagamento (ou configure o Hotmart/Stripe para enviar automaticamente). Cada código ativa o plano por N meses e só funciona uma vez.</p>
+      <div class="row">
+        <div style="flex:1;min-width:120px"><label>Plano</label>
+          <select id="genPlan" style="width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;background:#fff;font-family:inherit;font-size:.9rem;margin:4px 0 10px">
+            <option value="plus">Glow+</option><option value="pro">Glow Pro</option>
+          </select></div>
+        <div style="width:90px"><label>Meses</label><input type="number" id="genMonths" min="1" max="12" value="1"></div>
+        <div style="width:90px"><label>Qtd.</label><input type="number" id="genCount" min="1" max="50" value="1"></div>
+      </div>
+      <button class="btn" id="genBtn">Gerar código(s)</button>
+      <div id="genOut" style="margin-top:12px"></div>
+    </div>
+
+    <div class="card">
+      <h2>📣 Estatísticas de anúncios (deste aparelho)</h2>
+      <p class="sub" style="margin-bottom:10px">Impressões e cliques dos anúncios registrados neste navegador.</p>
       <div id="statsBox" class="sub">—</div>
     </div>
   </div>
@@ -164,7 +186,7 @@ async function tryLogin(){
   $('gate').classList.add('hidden');
   $('panel').classList.remove('hidden');
   $('logout').classList.remove('hidden');
-  loadStatus(); loadAds(); loadStats(); loadSubs();
+  loadStatus(); loadAds(); loadStats(); loadSubs(); loadMetrics();
   return true;
 }
 
@@ -307,6 +329,47 @@ $('saveAds').onclick = async ()=>{
     say('Erro ao publicar. Tente recarregar a página e salvar de novo.', 'err');
   }
   $('saveAds').disabled = false;
+};
+
+/* ---------- métricas globais (analytics próprio) ---------- */
+async function loadMetrics(){
+  try{
+    const r = await fetch(WORKER + '/stats', { headers: { 'X-Admin-Token': TOKEN } });
+    if(!r.ok) throw 0;
+    const d = await r.json();
+    const days = d.days || [];
+    const sum = k => days.reduce((s,x)=>s+(x[k]||0), 0);
+    const cards = [
+      ['visitors','visitantes'],['view','aberturas'],['quiz_done','perfis criados'],
+      ['scan','análises de pele'],['find','buscas por IA'],['store_click','cliques na loja 💰'],
+      ['chat','conversas c/ Lumi'],['subscribe_click','cliques em assinar'],['redeem_ok','assinaturas ativadas']
+    ];
+    $('metricTotals').innerHTML = cards.map(([k,l])=>
+      `<div class="stat"><div class="n">${sum(k)}</div><div class="l">${l}<br><span style="font-size:.65rem">30 dias</span></div></div>`).join('');
+    const recent = days.slice(0,7).filter(x=>x.visitors||x.view);
+    $('metricDaily').innerHTML = recent.length
+      ? '<b style="font-size:.85rem">Últimos dias</b>' + recent.map(x=>
+          `<div class="commit"><b>${x.d}</b> — ${x.visitors||0} visitantes · ${x.store_click||0} cliques na loja · ${x.find||0} buscas IA</div>`).join('')
+      : '<p class="sub">Ainda sem dados — eles aparecem conforme as usuárias usam o app.</p>';
+  }catch(e){ $('metricTotals').innerHTML = '<p class="sub">Não foi possível carregar as métricas.</p>'; }
+}
+
+/* ---------- gerar códigos de assinatura ---------- */
+$('genBtn').onclick = async ()=>{
+  $('genBtn').disabled = true;
+  $('genOut').innerHTML = '<p class="sub">Gerando…</p>';
+  try{
+    const r = await fetch(WORKER + '/gencodes', {
+      method:'POST', headers:{ 'Content-Type':'application/json', 'X-Admin-Token': TOKEN },
+      body: JSON.stringify({ plan: $('genPlan').value, months: +$('genMonths').value||1, count: +$('genCount').value||1 })
+    });
+    const d = await r.json();
+    if(!r.ok || !d.ok) throw 0;
+    $('genOut').innerHTML = `<p class="sub" style="margin-bottom:6px">${d.codes.length} código(s) · ${d.plan==='pro'?'Glow Pro':'Glow+'} · ${d.months} mês(es). Copie e entregue à compradora:</p>` +
+      d.codes.map(c=>`<div class="commit"><code>${c}</code></div>`).join('') +
+      `<button class="btn sec" style="margin-top:10px" onclick="navigator.clipboard.writeText('${d.codes.join('\\n')}');say('✓ Códigos copiados.','ok')">📋 Copiar códigos</button>`;
+  }catch(e){ $('genOut').innerHTML = '<p class="sub" style="color:#8c3a28">Erro ao gerar. Tente de novo.</p>'; }
+  $('genBtn').disabled = false;
 };
 
 /* ---------- estatísticas locais ---------- */

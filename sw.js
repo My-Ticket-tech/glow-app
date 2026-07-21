@@ -1,5 +1,5 @@
 /* Service worker do Glow — funciona offline e sempre entrega a versão mais nova */
-const CACHE = 'glow-v11';
+const CACHE = 'glow-v12';
 const ASSETS = ['./', './index.html', './manifest.json', './ads.json', './lumi.svg', './trending.json', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
